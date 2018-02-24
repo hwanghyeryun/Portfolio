@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	spring에서 mybatis를 사용할 경우 SQL 명령을 작성하는 xml 파일의 namespace에는 반드시 mapper로 사용할
+	인터페이스의 이름을 풀 패키지 이름과 같이 적어줘야 한다.
+-->
+<mapper namespace="kr.koreait.DAO.MybatisDAO">
+<insert id="insert" parameterType="kr.koreait.VO.dataVO">
+	insert into data(idx,source,before,target,after)
+	values(data_idx_seq.nextval,#{source},#{before},#{target},#{after})
+</insert>
+
+<select id="selectCount" resultType="int">
+	select count(*) from data
+</select>
+
+<select id="selectList" parameterType="java.util.HashMap" resultType="kr.koreait.VO.dataVO">
+	<![CDATA[
+		select * from (
+			select rownum rnum, TT.* from (
+				select * from data order by idx desc
+			) TT where rownum <= #{endNo}
+		) where rnum >= #{startNo}
+	]]>
+</select>
+</mapper>
+
+
+
+
+
+
+
+
+
